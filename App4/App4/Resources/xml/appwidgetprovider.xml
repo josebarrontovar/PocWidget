@@ -8,3 +8,4 @@
 	android:initialLayout="@layout/Widget"
 	android:previewImage="@mipmap/previewImage"
 />
+

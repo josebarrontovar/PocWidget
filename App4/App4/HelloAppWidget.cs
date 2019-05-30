@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Appwidget;
 using Android.Content;
+using Android.OS;
 using Android.Util;
 using Android.Widget;
 
@@ -33,7 +34,6 @@ namespace App4
 
             SetTextViewText(widgetView);
             RegisterClicks(context, appWidgetIds, widgetView);
-
             return widgetView;
         }
 
@@ -87,5 +87,6 @@ namespace App4
                 }
             }
         }
+
     }
 }
