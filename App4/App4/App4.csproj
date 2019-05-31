@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fragments\MenusFragment.cs" />
+    <Compile Include="HelloAppWidgetTwo.cs" />
     <Compile Include="HelloAppWidget.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -303,6 +304,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\WidgetTwo.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\appwidgettwo.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

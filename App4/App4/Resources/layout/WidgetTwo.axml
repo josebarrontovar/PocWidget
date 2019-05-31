@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#DA7F03"
-    android:id="@+id/widgetBackground2"
+    android:background="#E20CFF"
+    android:id="@+id/widgetBackground"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,7 +11,7 @@
         android:layout_height="fill_parent">
         <ImageView
             android:id="@+id/widgetAnnouncementIcon"
-            android:src="@mipmap/ic_clock_white"
+            android:src="@mipmap/ic_launcher"
             android:layout_width="35dip"
             android:layout_height="35dip"
             android:layout_marginLeft="15dip"
@@ -21,7 +21,7 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#993444">
+        android:background="#E20CFF">
         <TextView
             android:id="@+id/widgetMedium"
             android:text="Widget THD..."

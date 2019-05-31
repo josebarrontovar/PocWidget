@@ -3745,8 +3745,8 @@ namespace App4
 			// aapt resource value: 0x7f0a000a
 			public const int ghost_view = 2131361802;
 			
-			// aapt resource value: 0x7f0a00cf
-			public const int group1 = 2131361999;
+			// aapt resource value: 0x7f0a00ce
+			public const int group1 = 2131361998;
 			
 			// aapt resource value: 0x7f0a0084
 			public const int group_divider = 2131361924;
@@ -3760,8 +3760,8 @@ namespace App4
 			// aapt resource value: 0x7f0a0029
 			public const int homeAsUp = 2131361833;
 			
-			// aapt resource value: 0x7f0a00d0
-			public const int homess = 2131362000;
+			// aapt resource value: 0x7f0a00cf
+			public const int homess = 2131361999;
 			
 			// aapt resource value: 0x7f0a0074
 			public const int icon = 2131361908;
@@ -3808,17 +3808,17 @@ namespace App4
 			// aapt resource value: 0x7f0a006a
 			public const int marquee = 2131361898;
 			
-			// aapt resource value: 0x7f0a00ce
-			public const int masked = 2131361998;
+			// aapt resource value: 0x7f0a00cd
+			public const int masked = 2131361997;
 			
 			// aapt resource value: 0x7f0a00b5
 			public const int menu_red = 2131361973;
 			
-			// aapt resource value: 0x7f0a00d2
-			public const int menu_snack = 2131362002;
+			// aapt resource value: 0x7f0a00d1
+			public const int menu_snack = 2131362001;
 			
-			// aapt resource value: 0x7f0a00d3
-			public const int menu_tab = 2131362003;
+			// aapt resource value: 0x7f0a00d2
+			public const int menu_tab = 2131362002;
 			
 			// aapt resource value: 0x7f0a009f
 			public const int message = 2131361951;
@@ -3877,8 +3877,8 @@ namespace App4
 			// aapt resource value: 0x7f0a0059
 			public const int pin = 2131361881;
 			
-			// aapt resource value: 0x7f0a00d1
-			public const int progress = 2131362001;
+			// aapt resource value: 0x7f0a00d0
+			public const int progress = 2131362000;
 			
 			// aapt resource value: 0x7f0a0006
 			public const int progress_circular = 2131361798;
@@ -4108,17 +4108,14 @@ namespace App4
 			// aapt resource value: 0x7f0a001b
 			public const int view_offset_helper = 2131361819;
 			
-			// aapt resource value: 0x7f0a00cd
-			public const int visible = 2131361997;
+			// aapt resource value: 0x7f0a00cc
+			public const int visible = 2131361996;
 			
 			// aapt resource value: 0x7f0a00c9
 			public const int widgetAnnouncementIcon = 2131361993;
 			
 			// aapt resource value: 0x7f0a00c8
 			public const int widgetBackground = 2131361992;
-			
-			// aapt resource value: 0x7f0a00cc
-			public const int widgetBackground2 = 2131361996;
 			
 			// aapt resource value: 0x7f0a00ca
 			public const int widgetMedium = 2131361994;
@@ -6202,7 +6199,10 @@ namespace App4
 			public const int appwidgetprovider = 2131230720;
 			
 			// aapt resource value: 0x7f080001
-			public const int xamarin_essentials_fileprovider_file_paths = 2131230721;
+			public const int appwidgettwo = 2131230721;
+			
+			// aapt resource value: 0x7f080002
+			public const int xamarin_essentials_fileprovider_file_paths = 2131230722;
 			
 			static Xml()
 			{

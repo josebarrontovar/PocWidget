@@ -13,8 +13,8 @@ namespace App4
     //[IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE" })]
     //// The "Resource" file has to be all in lower caps
     //[MetaData("android.appwidget.provider", Resource = "@xml/appwidgetprovider")]
-    [Activity(Name = "com.companyname.App4.AppWidget", Label = "MySuperDuperApp", MainLauncher = true, Icon = "@mipmap/icon")]
-    public class AppWidget : AppWidgetProvider
+    [Activity(Name = "com.companyname.App4.AppWidgetTwo", Label = "MySuperDuperApp", MainLauncher = true, Icon = "@mipmap/icon")]
+    public class AppWidgetTwo : AppWidgetProvider
     {
         private static string AnnouncementClick = "AnnouncementClickTag";
 
@@ -24,14 +24,14 @@ namespace App4
         /// </summary>
         public override void OnUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
         {
-            var me = new ComponentName(context, Java.Lang.Class.FromType(typeof(AppWidget)).Name);
+            var me = new ComponentName(context, Java.Lang.Class.FromType(typeof(AppWidgetTwo)).Name);
             appWidgetManager.UpdateAppWidget(me, BuildRemoteViews(context, appWidgetIds));
         }
 
         private RemoteViews BuildRemoteViews(Context context, int[] appWidgetIds)
         {
             // Retrieve the widget layout. This is a RemoteViews, so we can't use 'FindViewById'
-            var widgetView = new RemoteViews(context.PackageName, Resource.Layout.Widget);
+            var widgetView = new RemoteViews(context.PackageName, Resource.Layout.WidgetTwo);
 
             SetTextViewText(widgetView);
             RegisterClicks(context, appWidgetIds, widgetView);
@@ -40,13 +40,13 @@ namespace App4
 
         private void SetTextViewText(RemoteViews widgetView)
         {
-            widgetView.SetTextViewText(Resource.Id.widgetMedium, "Widget 1...");
+            widgetView.SetTextViewText(Resource.Id.widgetMedium, "Widget 2...");
             widgetView.SetTextViewText(Resource.Id.widgetSmall, string.Format("Last update: {0:H:mm:ss}", DateTime.Now));
         }
 
         private void RegisterClicks(Context context, int[] appWidgetIds, RemoteViews widgetView)
         {
-            var intent = new Intent(context, typeof(AppWidget));
+            var intent = new Intent(context, typeof(AppWidgetTwo));
             intent.SetAction(AppWidgetManager.ActionAppwidgetUpdate);
             intent.PutExtra(AppWidgetManager.ExtraAppwidgetIds, appWidgetIds);
 
@@ -60,7 +60,7 @@ namespace App4
 
         private PendingIntent GetPendingSelfIntent(Context context, string action)
         {
-            var intent = new Intent(context, typeof(AppWidget));
+            var intent = new Intent(context, typeof(AppWidgetTwo));
             intent.SetAction(action);
             return PendingIntent.GetBroadcast(context, 0, intent, 0);
         }
