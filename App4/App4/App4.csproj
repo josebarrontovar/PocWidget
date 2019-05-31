@@ -64,8 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fragments\MenusFragment.cs" />
-    <Compile Include="HelloAppWidgetTwo.cs" />
-    <Compile Include="HelloAppWidget.cs" />
+    <Compile Include="Widgets\HelloAppWidgetTwo.cs" />
+    <Compile Include="Widgets\HelloAppWidget.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

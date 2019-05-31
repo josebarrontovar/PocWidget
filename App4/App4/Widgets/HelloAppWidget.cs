@@ -7,7 +7,7 @@ using Android.OS;
 using Android.Util;
 using Android.Widget;
 
-namespace App4
+namespace App4.Widgets
 {
     //[BroadcastReceiver(Label = "HellApp Widget")]
     //[IntentFilter(new string[] { "android.appwidget.action.APPWIDGET_UPDATE" })]
