@@ -20,14 +20,47 @@
         android:fontFamily="sans-serif-light"
         android:background="@color/app_primary"
         android:elevation="4dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:padding="16dp"
-        android:textSize="18sp"
-        android:text="@string/lorem_ipsum_large" />
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Status"
+      android:layout_below="@+id/header"
+      android:layout_marginTop="20dp"
+      android:id="@+id/statusViewTitle" />
 
+     <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+        android:background="#E3DC11"
+      android:text=""
+      android:layout_below="@+id/statusViewTitle"
+      android:id="@+id/statusView" />
+
+     <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+          android:background="#9898"
+      android:text="@string/dataView_text"
+      android:layout_below="@+id/statusView"
+      android:id="@+id/DataViewTitle" />
+  <ScrollView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/scrollView2"
+          android:background="#989822"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentBottom="true"
+      android:layout_below="@+id/DataViewTitle">
+    <TextView
+        android:layout_width="wrap_content"
+              android:background="#933412"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scrollView2"
+        android:id="@+id/DataView" />
+  </ScrollView>
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu_red"
         android:layout_width="match_parent"

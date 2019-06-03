@@ -17,24 +17,28 @@ using App4;
 using FloatingActionButton = Com.Github.Clans.Fab.FloatingActionButton;
 using FloatingActionMenu = Com.Github.Clans.Fab.FloatingActionMenu;
 using Fragment = Android.Support.V4.App.Fragment;
+using Symbol.XamarinEMDK;
+using Symbol.XamarinEMDK.Barcode;
+using Android.Preferences;
 
 namespace App4.Fragments
 {
-    public class MenusFragment : Fragment, View.IOnClickListener
+    public class MenusFragment : Fragment, View.IOnClickListener, EMDKManager.IEMDKListener
     {
+        #region EMDKVariables
+        private TextView statusView = null;
+        private TextView dataView = null;
 
+        EMDKManager emdkManager = null;
+        BarcodeManager barcodeManager = null;
+        Scanner scanner = null;
+        #endregion
         private FloatingActionMenu menuRed;
-        //private FloatingActionMenu menuYellow;
-        //private FloatingActionMenu menuGreen;
-        //private FloatingActionMenu menuBlue;
-        //private FloatingActionMenu menuDown;
-        //private FloatingActionMenu menuLabelsRight;
-
         private FloatingActionButton fab1;
         private FloatingActionButton fab2;
         private FloatingActionButton fab3;
 
-        //private FloatingActionButton fabEdit;
+
 
         private List<FloatingActionMenu> menus = new List<FloatingActionMenu> (6);
         private Handler mUiHandler = new Handler ();
@@ -50,67 +54,237 @@ namespace App4.Fragments
             base.OnViewCreated (view, savedInstanceState);
 
             menuRed = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_red);
-            //menuYellow = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_yellow);
-            //menuGreen = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_green);
-            // menuBlue = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_blue);
-            //menuDown = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_down);
-            //menuLabelsRight = view.FindViewById<FloatingActionMenu> (Resource.Id.menu_labels_right);
 
             fab1 = view.FindViewById<FloatingActionButton> (Resource.Id.fab1);
             fab2 = view.FindViewById<FloatingActionButton> (Resource.Id.fab2);
             fab3 = view.FindViewById<FloatingActionButton> (Resource.Id.fab3);
 
+            statusView = view.FindViewById<TextView>(Resource.Id.statusView);
+            dataView = view.FindViewById<TextView>(Resource.Id.DataView);
 
-            //FloatingActionButton programFab1 = new FloatingActionButton (this.Activity);
-            //programFab1.ButtonSize = FloatingActionButton.SizeMini;
-            //programFab1.LabelText = this.GetString (Resource.String.lorem_ipsum);
-            //programFab1.SetImageResource (Resource.Drawable.ic_edit);
-            //menuRed.AddMenuButton (programFab1);
-            //programFab1.Click += ProgramFab1_Click;
 
             ContextThemeWrapper context = new ContextThemeWrapper (this.Activity, Resource.Style.MenuButtonsStyle);
             FloatingActionButton programFab2 = new FloatingActionButton (context);
+
+            EMDKResults results = EMDKManager.GetEMDKManager(Application.Context, this);
+            if (results.StatusCode != EMDKResults.STATUS_CODE.Success)
+            {
+                statusView.Text = "Status: EMDKManager object creation failed ...";
+            }
+            else
+            {
+                statusView.Text = "Status: EMDKManager object creation succeeded ...";
+            }
             programFab2.LabelText = "Programmatically added button";
             programFab2.SetImageResource (Resource.Drawable.ic_edit);
-            //menuYellow.AddMenuButton (programFab2);
-
-
             fab1.Enabled = false;
             menuRed.SetOnMenuButtonClickListener (this);
             menuRed.SetClosedOnTouchOutside (true);
-            //menuBlue.IconAnimated = false;
-
-
-           // menuDown.HideMenuButton (false);
             menuRed.HideMenuButton (false);
-            //menuYellow.HideMenuButton (false);
-            //menuGreen.HideMenuButton (false);
-            //menuBlue.HideMenuButton (false);
-           // menuLabelsRight.HideMenuButton (false);
+;
+        }
+        #region EMDK
 
 
-            //fabEdit = view.FindViewById<FloatingActionButton> (Resource.Id.fab_edit);
-        //    fabEdit.SetShowAnimation (AnimationUtils.LoadAnimation (this.Activity, Resource.Animation.scale_up));
-        //    fabEdit.SetHideAnimation (AnimationUtils.LoadAnimation (this.Activity, Resource.Animation.scale_down));
+
+        void displayStatus(String status)
+        {
+            if (Looper.MainLooper.Thread == Java.Lang.Thread.CurrentThread())
+            {
+                statusView.Text = status;
+            }
         }
 
+
+        void displaydata(string data)
+        {
+            //if (Looper.MainLooper.Thread == Java.Lang.Thread.CurrentThread())
+            //{
+            //    dataView.Text += (data + "\n");
+            //}
+
+            ((MainActivity)this.Activity).setData(data);
+
+
+            //ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+            //ISharedPreferencesEditor editor = prefs.Edit();
+            //editor.PutString("my_data", data);
+            //editor.Apply();
+
+        }
+
+        void EMDKManager.IEMDKListener.OnOpened(EMDKManager emdkManager)
+        {
+            statusView.Text = "Status: EMDK Opened successfully ...";
+
+            this.emdkManager = emdkManager;
+
+            InitScanner();
+        }
+        void InitScanner()
+        {
+            if (emdkManager != null)
+            {
+
+                if (barcodeManager == null)
+                {
+                    try
+                    {
+
+                        //Get the feature object such as BarcodeManager object for accessing the feature.
+                        barcodeManager = (BarcodeManager)emdkManager.GetInstance(EMDKManager.FEATURE_TYPE.Barcode);
+
+                        scanner = barcodeManager.GetDevice(BarcodeManager.DeviceIdentifier.Default);
+
+                        if (scanner != null)
+                        {
+
+                            //Attahch the Data Event handler to get the data callbacks.
+                            scanner.Data += scanner_Data;
+
+                            //Attach Scanner Status Event to get the status callbacks.
+                            scanner.Status += scanner_Status;
+
+                            scanner.Enable();
+
+                            //EMDK: Configure the scanner settings
+                            ScannerConfig config = scanner.GetConfig();
+                            config.SkipOnUnsupported = ScannerConfig.SkipOnUnSupported.None;
+                            config.ScanParams.DecodeLEDFeedback = true;
+                            config.ReaderParams.ReaderSpecific.ImagerSpecific.PickList = ScannerConfig.PickList.Enabled;
+                            config.DecoderParams.Code39.Enabled = true;
+                            config.DecoderParams.Code128.Enabled = false;
+                            scanner.SetConfig(config);
+
+                        }
+                        else
+                        {
+                            displayStatus("Failed to enable scanner.\n");
+                        }
+                    }
+                    catch (ScannerException e)
+                    {
+                        displayStatus("Error: " + e.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        displayStatus("Error: " + ex.Message);
+                    }
+                }
+            }
+
+
+        }
+        void DeinitScanner()
+        {
+            if (emdkManager != null)
+            {
+
+                if (scanner != null)
+                {
+                    try
+                    {
+
+                        scanner.Data -= scanner_Data;
+                        scanner.Status -= scanner_Status;
+
+                        scanner.Disable();
+
+
+                    }
+                    catch (ScannerException e)
+                    {
+                        Log.Debug(this.Class.SimpleName, "Exception:" + e.Result.Description);
+                    }
+                }
+
+                if (barcodeManager != null)
+                {
+                    emdkManager.Release(EMDKManager.FEATURE_TYPE.Barcode);
+                }
+                barcodeManager = null;
+                scanner = null;
+            }
+
+
+        }
+        void scanner_Status(object sender, Scanner.StatusEventArgs e)
+        {
+            String statusStr = "";
+
+            //EMDK: The status will be returned on multiple cases. Check the state and take the action.
+            StatusData.ScannerStates state = e.P0.State;
+
+            if (state == StatusData.ScannerStates.Idle)
+            {
+                statusStr = "Scanner is idle and ready to submit read.";
+                try
+                {
+                    if (scanner.IsEnabled && !scanner.IsReadPending)
+                    {
+                        scanner.Read();
+                    }
+                }
+                catch (ScannerException e1)
+                {
+                    statusStr = e1.Message;
+                }
+            }
+            if (state == StatusData.ScannerStates.Waiting)
+            {
+                statusStr = "Waiting for Trigger Press to scan";
+            }
+            if (state == StatusData.ScannerStates.Scanning)
+            {
+                statusStr = "Scanning in progress...";
+            }
+            if (state == StatusData.ScannerStates.Disabled)
+            {
+                statusStr = "Scanner disabled";
+            }
+            if (state == StatusData.ScannerStates.Error)
+            {
+                statusStr = "Error occurred during scanning";
+
+            }
+            displayStatus(statusStr);
+
+
+        }
+        void scanner_Data(object sender, Scanner.DataEventArgs e)
+        {
+            ScanDataCollection scanDataCollection = e.P0;
+
+            if ((scanDataCollection != null) && (scanDataCollection.Result == ScannerResults.Success))
+            {
+                IList<ScanDataCollection.ScanData> scanData = scanDataCollection.GetScanData();
+
+                foreach (ScanDataCollection.ScanData data in scanData)
+                {
+                    //displaydata(data.LabelType + " : " + data.Data);
+                    displaydata(data.Data);
+                }
+            }
+
+
+        }
+        void EMDKManager.IEMDKListener.OnClosed()
+        {
+            statusView.Text = "Status: EMDK Open failed unexpectedly. ";
+
+            if (emdkManager != null)
+            {
+                emdkManager.Release();
+                emdkManager = null;
+            }
+        }
+        #endregion
         public override void OnActivityCreated (Bundle savedInstanceState)
         {
             base.OnActivityCreated (savedInstanceState);
 
-            //menus.Add (menuDown);
+     
             menus.Add (menuRed);
-            //menus.Add (menuYellow);
-            //menus.Add (menuGreen);
-            //menus.Add (menuBlue);
-           // menus.Add (menuLabelsRight);
-
-            ////menuYellow.MenuToggle += (object sender, FloatingActionMenu.MenuToggleEventArgs e) => 
-            //{
-            //    string text = (e.P0 ? "Menu opened" : "Menu closed");
-            //    Toast.MakeText (this.Activity, text, ToastLength.Short).Show ();
-            //};
-
             fab1.Click += ActionButton_Click;
             fab2.Click += ActionButton_OpenSettings;
             fab3.Click += ActionButton_Click;
@@ -122,38 +296,7 @@ namespace App4.Fragments
                 delay += 150;
             }
 
-            //new Handler ().PostDelayed (() => fabEdit.Show (true), delay + 150);
 
-            CreateCustomAnimation ();
-        }
-
-
-
-        private void CreateCustomAnimation ()
-        {
-            AnimatorSet set = new AnimatorSet ();
-
-            //ObjectAnimator scaleOutX = ObjectAnimator.OfFloat (menuGreen.MenuIconView, "scaleX", 1.0f, 0.2f);
-            //ObjectAnimator scaleOutY = ObjectAnimator.OfFloat (menuGreen.MenuIconView, "scaleY", 1.0f, 0.2f);
-
-            //ObjectAnimator scaleInX = ObjectAnimator.OfFloat (menuGreen.MenuIconView, "scaleX", 0.2f, 1.0f);
-            //ObjectAnimator scaleInY = ObjectAnimator.OfFloat (menuGreen.MenuIconView, "scaleY", 0.2f, 1.0f);
-
-            //scaleOutX.SetDuration (50);
-            //scaleOutY.SetDuration (50);
-
-            //scaleInX.SetDuration (150);
-            //scaleInY.SetDuration (150);
-
-            //scaleInX.AnimationStart += (object sender, EventArgs e) => {
-            //    menuGreen.MenuIconView.SetImageResource (menuGreen.IsOpened ? Resource.Drawable.ic_close : Resource.Drawable.ic_star);
-            //};
-
-            //set.Play (scaleOutX).With (scaleOutY);
-            //set.Play (scaleInX).With (scaleInY).After (scaleOutX);
-            //set.SetInterpolator (new OvershootInterpolator (2));
-
-            //menuGreen.IconToggleAnimatorSet = set;
         }
 
         private void ActionButton_OpenSettings(object sender, EventArgs e)

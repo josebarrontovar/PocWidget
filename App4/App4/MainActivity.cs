@@ -18,6 +18,13 @@ using FragmentTransaction = Android.Support.V4.App.FragmentTransaction;
 using App4.Fragments;
 using Android.Runtime;
 using Android.Graphics;
+using Symbol.XamarinEMDK;
+using Symbol.XamarinEMDK.Barcode;
+using Android.Util;
+using System.Collections.Generic;
+using Android.Preferences;
+using Java.Lang;
+using System.Threading.Tasks;
 
 namespace App4
 {
@@ -27,15 +34,25 @@ namespace App4
         private DrawerLayout drawerLayout;
         private ActionBarDrawerToggle toggle;
         private NavigationView navigationView;
+
+        //#region EMDKVariables
+        //private TextView statusView = null;
+        //private TextView dataView = null;
+
+        //EMDKManager emdkManager = null;
+        //BarcodeManager barcodeManager = null;
+        //Scanner scanner = null;
+        //#endregion
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
             Toolbar toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             StatusBar();
+            //InitializeEMDK();
             drawerLayout = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, Resource.String.navigation_drawer_open, Resource.String.navigation_drawer_close);
             drawerLayout.AddDrawerListener(this.toggle);
@@ -47,7 +64,29 @@ namespace App4
                 SupportFragmentManager.BeginTransaction().Add(Resource.Id.fragment, new MenusFragment()).Commit();
             }
             else
-            navigationView.SetCheckedItem(Resource.Id.home);
+            {
+                navigationView.SetCheckedItem(Resource.Id.home);
+            }
+
+            //ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+            //String myData = prefs.GetString("my_data", "");
+        }
+
+       public async void setData(string data)
+        {
+            RunOnUiThread(() => {
+                MethodOne(data);
+            });
+
+        }
+
+        private void MethodOne(string data)
+        {
+
+           
+
+
+            Toast.MakeText(Application.Context, "Numero escaneado:"+ data, ToastLength.Long).Show();
         }
 
         private void StatusBar()
