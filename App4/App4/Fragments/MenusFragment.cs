@@ -287,7 +287,7 @@ namespace App4.Fragments
             menus.Add (menuRed);
             fab1.Click += ActionButton_Click;
             fab2.Click += ActionButton_OpenSettings;
-            fab3.Click += ActionButton_Click;
+            fab3.Click += ActionButton_SetWallpaper;
 
             int delay = 400;
             foreach (var menu in menus) 
@@ -297,6 +297,12 @@ namespace App4.Fragments
             }
 
 
+        }
+
+        private void ActionButton_SetWallpaper(object sender, EventArgs e)
+        {
+            WallpaperManager myWallpaperManager = WallpaperManager.GetInstance(Context.ApplicationContext);
+            myWallpaperManager.SetResource(Resource.Mipmap.thdwallpaper);
         }
 
         private void ActionButton_OpenSettings(object sender, EventArgs e)

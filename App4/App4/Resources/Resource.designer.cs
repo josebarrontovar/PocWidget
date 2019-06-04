@@ -4476,6 +4476,9 @@ namespace App4
 			// aapt resource value: 0x7f030006
 			public const int previewImage = 2130903046;
 			
+			// aapt resource value: 0x7f030007
+			public const int thdwallpaper = 2130903047;
+			
 			static Mipmap()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
